@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "506102094542",
+    "project_id": "eztrackerapp",
+    "storage_bucket": "eztrackerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506102094542:android:43c34e0757dba2c41d8e9f",
+        "android_client_info": {
+          "package_name": "com.example.ez_tracker_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506102094542-nh1s30hp48qha7p5ggu51mm07ue0v4cj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADMi8uZWIS62be4GaufTp82wtg6gmIb5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506102094542-nh1s30hp48qha7p5ggu51mm07ue0v4cj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
