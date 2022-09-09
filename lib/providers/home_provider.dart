@@ -13,6 +13,7 @@ class HomeProvider extends BaseProvider {
   Future<void> getPosition() async {
     try {
       final Position position = await locationService.determinePosition();
+      print("${position.latitude}  ${position.longitude}");
       _latLongModel =
           LatLongModel(lat: position.latitude, long: position.longitude);
       enabledLocationService = true;
@@ -88,6 +89,7 @@ class HomeProvider extends BaseProvider {
     return firestoreDBService.collectionStream<TrackerRecordModel>(
       path: FireStoreEndPoints.driveRecords,
       queryBuilder: (record) {
+        var non = '';
         return record
             .where(
               'status_id',
@@ -96,6 +98,14 @@ class HomeProvider extends BaseProvider {
             .where(
               "userid",
               isEqualTo: firebaseAuthService.currentUser()?.uid ?? '',
+            )
+            // .where(
+            //   'primary_category',
+            //   isEqualTo: 'personal',
+            // )
+            .where(
+              'primary_category',
+              whereIn: ['personal', 'business'],
             )
             .orderBy('record_created_date')
             .startAt(
@@ -136,12 +146,14 @@ class HomeProvider extends BaseProvider {
       ),
     );
 
-    await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/$recordId',
-      data: record.toMap(
-        recordId: recordId,
-      ),
-      withMerge: true,
-    ).whenComplete(() => print("data uploaded"));
+    await firestoreDBService
+        .setData(
+          path: '${FireStoreEndPoints.driveRecords}/$recordId',
+          data: record.toMap(
+            recordId: recordId,
+          ),
+          withMerge: true,
+        )
+        .whenComplete(() => print("data uploaded"));
   }
 }

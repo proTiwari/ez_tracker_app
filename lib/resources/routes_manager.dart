@@ -7,6 +7,8 @@ import 'package:ez_tracker_app/uis/screens/signup/sign_up_screen.dart';
 import 'package:ez_tracker_app/uis/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../uis/screens/all_months_details/all_months_details_screen.dart';
+
 class AppRoutes {
   static const String splashRoute = '/';
   static const String loginRoute = '/login';
@@ -14,6 +16,7 @@ class AppRoutes {
   static const String homeRoute = '/home';
   static const String myActivityRoute = '/my-activity';
   static const String mapDetailsRoute = '/map-details';
+  static const String report = '/report';
 
   static void popUntil(
     BuildContext context, {
@@ -69,6 +72,11 @@ class RouteGenerator {
           child: MapDetailsScreen(
             routeModel: routeSettings.arguments as MapDetailsRouteModel,
           ),
+        );
+      case AppRoutes.report:
+        return _buildRouteScreen(
+          name: routeSettings.name,
+          child: const AllMonthsDetailsScreen(),
         );
       default:
         return unDefinedRoute();

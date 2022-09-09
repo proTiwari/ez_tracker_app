@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ez_tracker_app">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>-->
    <application
+           android:requestLegacyExternalStorage="true"
         android:label="ez_tracker_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -33,5 +36,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+                  android:value="AIzaSyBZRJtp-2KEEwFJCy_NgalXY9bUp3ZU3bE"/>
+   </application>
 </manifest>

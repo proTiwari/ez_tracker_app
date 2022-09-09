@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:select_dialog/select_dialog.dart';
 
 import '../../../../models/tracker_record/tracker_record_model.dart';
+import 'list_tile_rating_bar.dart';
 
 class RecordListTileSwipable extends StatefulWidget {
   const RecordListTileSwipable({
@@ -144,13 +145,14 @@ class _RecordListTileSwipableState extends State<RecordListTileSwipable> {
     );
   }
 
-  void showCategoryPicker(
+  Future<void> showCategoryPicker(
     BuildContext context, {
     required CategoryType categoryType,
-  }) {
+  }) async {
     final provider = Provider.of<RecordTileProvider>(context, listen: false);
     final AccountProvider accountProvider =
         Provider.of<AccountProvider>(context, listen: false);
+    await accountProvider.getCategoriesData();
     final List<String>? categories = categoryType == CategoryType.business
         ? accountProvider.categoryModel?.business
         : accountProvider.categoryModel?.personal;
@@ -165,9 +167,11 @@ class _RecordListTileSwipableState extends State<RecordListTileSwipable> {
       onChange: (String selected) {
         setState(() {
           selectedCategory = selected;
+          print(selected);
         });
+        const ListTileRatingBar();
         onUpdateCategory(context,
-            primary: categoryType.name, subCategory: selected);
+        primary: categoryType.name, subCategory: selected);
       },
     );
   }
@@ -178,6 +182,7 @@ class _RecordListTileSwipableState extends State<RecordListTileSwipable> {
     required String? subCategory,
   }) {
     final provider = Provider.of<RecordTileProvider>(context, listen: false);
+
     provider.updateCategory(
       primary: primary,
       subCategory: subCategory,

@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../services/background_location_service.dart';
+import '../../../services/sensor_plus_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,9 +35,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> getPosition() async {
+    print("getPosition");
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     await homeProvider.getPosition();
-    BackgroundLocationService.instance.initLocationTrackingEvent();
+    // BackgroundLocationService.instance.initLocationTrackingEvent();
+    SensorPlusService.instance.initLocationTrackingEvent();
   }
 
   @override
@@ -50,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
       await homeProvider.checkLocationServiceEnabled();
-      BackgroundLocationService.instance.initLocationTrackingEvent();
+      // BackgroundLocationService.instance.initLocationTrackingEvent();
+      SensorPlusService.instance.initLocationTrackingEvent();
     }
   }
 
@@ -74,54 +78,55 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              DateFormat('MMMM').format(DateTime.now()),
+              "Unclassified activity",
+              // DateFormat('MMMM').format(DateTime.now()),
               style: getMediumStyle(
                 color: ColorManager.black,
                 fontSize: FontSize.s18,
               ),
             ),
-            const Icon(
-              Icons.arrow_drop_down,
-              color: ColorManager.black,
-            )
+            // const Icon(
+            //   Icons.arrow_drop_down,
+            //   color: ColorManager.black,
+            // )
           ],
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.sim_card,
-              color: ColorManager.grey2,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(
+          //     Icons.sim_card,
+          //     color: ColorManager.grey2,
+          //   ),
+          // ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(AppHeight.h50),
-          child: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: ColorManager.accent,
-                  width: 4,
-                ),
-              ),
-            ),
-            padding: EdgeInsets.only(
-              bottom: AppPadding.p5,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildHeaderColumn(title: 'DRIVES', value: '0'),
-                _buildHeaderColumn(title: 'MILES DRIVEN', value: '00000'),
-                _buildHeaderColumn(title: 'LOGGED', value: '\$0'),
-              ],
-            ),
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(AppHeight.h50),
+        //   child: Container(
+        //     width: double.infinity,
+        //     decoration: const BoxDecoration(
+        //       border: Border(
+        //         bottom: BorderSide(
+        //           color: ColorManager.accent,
+        //           width: 4,
+        //         ),
+        //       ),
+        //     ),
+        //     padding: EdgeInsets.only(
+        //       bottom: AppPadding.p5,
+        //     ),
+        //     // child: Row(
+        //     //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     //   crossAxisAlignment: CrossAxisAlignment.end,
+        //     //   children: [
+        //     //     _buildHeaderColumn(title: 'DRIVES', value: '0'),
+        //     //     _buildHeaderColumn(title: 'MILES DRIVEN', value: '00000'),
+        //     //     _buildHeaderColumn(title: 'LOGGED', value: '\$0'),
+        //     //   ],
+        //     // ),
+        //   ),
+        // ),
       ),
       body: _buildBody(),
     );

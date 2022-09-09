@@ -3,9 +3,12 @@ import 'dart:ui';
 import 'package:ez_tracker_app/services/pref_service.dart';
 import 'package:ez_tracker_app/services/sensor_plus_service.dart';
 import 'package:ez_tracker_app/utils/utility_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_background_service/flutter_background_service.dart';
+
+import 'background_location_service.dart';
 
 // to ensure this is executed
 // run app from xcode, then from xcode menu, select Simulate Background Fetch
@@ -13,12 +16,10 @@ bool onIosBackground(ServiceInstance service) {
   WidgetsFlutterBinding.ensureInitialized();
   UtilityHelper.showLog('FLUTTER BACKGROUND FETCH');
   service.on('update').listen((event) {
-    SensorPlusService.instance.initLocationTrackingEvent();
+    BackgroundLocationService.instance.initLocationTrackingEvent();
   });
   return true;
 }
-
-
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
@@ -30,7 +31,7 @@ void onStart(ServiceInstance service) async {
   UtilityHelper.showLog('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
 
   service.on('update').listen((event) {
-    SensorPlusService.instance.initLocationTrackingEvent();
+    BackgroundLocationService.instance.initLocationTrackingEvent();
   });
 }
 
@@ -41,23 +42,26 @@ class BackgroundService {
 
   Future<void> init() async {
     final service = FlutterBackgroundService();
-    await service.configure(
-      androidConfiguration: AndroidConfiguration(
-        // this will be executed when app is in foreground or background in separated isolate
-        onStart: onStart,
-        // auto start service
-        autoStart: false,
-        isForegroundMode: true,
-      ),
-      iosConfiguration: IosConfiguration(
-        // auto start service
-        autoStart: false,
-        // this will be executed when app is in foreground in separated isolate
-        onForeground: onStart,
-        // you have to enable background fetch capability on xcode project
-        onBackground: onIosBackground,
-      ),
-    );
+    if(!kIsWeb){
+      await service.configure(
+
+          androidConfiguration: AndroidConfiguration(
+            // this will be executed when app is in foreground or background in separated isolate
+            onStart: onStart,
+            // auto start service
+            autoStart: true,
+            isForegroundMode: true,
+          ),
+          iosConfiguration: IosConfiguration(
+            // auto start service
+            autoStart: false,
+            // this will be executed when app is in foreground in separated isolate
+            onForeground: onStart,
+            // you have to enable background fetch capability on xcode project
+            onBackground: onIosBackground,
+          )
+      );
+    }
     service.startService();
   }
 

@@ -45,18 +45,16 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(AppRoutes.myActivityRoute);
             },
           ),
-          // _buildListTile(
-          //   icon: Icons.car_crash,
-          //   title: 'View All Months',
-          // ),
-          // _buildListTile(
-          //   icon: Icons.settings,
-          //   title: 'Account Settings',
-          // ),
-          // _buildListTile(
-          //   icon: Icons.location_on,
-          //   title: 'Drive Detection (On)',
-          // ),
+          _buildListTile(
+            context,
+            icon: Icons.car_crash,
+            title: 'View All Months',
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(AppRoutes.report);
+          },
+          ),
+
           _buildListTile(
             context,
             icon: Icons.help_center,

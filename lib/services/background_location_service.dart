@@ -4,6 +4,7 @@ import 'package:background_location/background_location.dart';
 import 'package:ez_tracker_app/models/tracker_record/tracker_record_model.dart';
 import 'package:ez_tracker_app/services/firestore_service.dart';
 import 'package:ez_tracker_app/services/pref_service.dart';
+import 'package:ez_tracker_app/services/sensor_plus_service.dart';
 import 'package:ez_tracker_app/utils/utility_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:uuid/uuid.dart';
@@ -16,7 +17,6 @@ class BackgroundLocationService {
 
   BackgroundLocationService._();
   static final instance = BackgroundLocationService._();
-
   final firebaseAuthService = AuthService.instance;
   final firestoreDBService = FireStoreService.instance;
   final preferenceService = PreferenceService.instance;
@@ -64,9 +64,9 @@ class BackgroundLocationService {
   //==========================
 
   Future<void> initLocationTrackingEvent() async {
-    // final isTrackingStarted = await PreferenceService.instance
-    //     .getBoolPrefValue(key: PrefKeys.isTrackingStarted);
-    // if (isTrackingStarted) return;
+    final isTrackingStarted = await PreferenceService.instance
+        .getBoolPrefValue(key: PrefKeys.isTrackingStarted);
+    if (isTrackingStarted) return;
     UtilityHelper.showLog('initLocationTrackingEvent: Called');
     BackgroundLocation.setAndroidNotification(
       title: "Track-Ez",
@@ -76,8 +76,9 @@ class BackgroundLocationService {
     BackgroundLocation.setAndroidConfiguration(1000);
     BackgroundLocation.startLocationService(forceAndroidLocationManager: true);
     BackgroundLocation.getLocationUpdates((location) {
-      // preferenceService.setBoolPrefValue(
-      //     value: true, key: PrefKeys.isTrackingStarted);
+
+      preferenceService.setBoolPrefValue(
+          value: true, key: PrefKeys.isTrackingStarted);
       vehicleSpeed = location.speed == null
           ? 0
           : (((location.speed ?? 0) * 18) /
@@ -87,8 +88,10 @@ class BackgroundLocationService {
   }
 
   void checkSpeedAndStartTracking() {
+    print("checkSpeedAndStartTracking");
     UtilityHelper.showLog('VehicleSpeed ${vehicleSpeed.toString()}');
     if (isInMotion) {
+      print("device in motion");
       stopTimer();
       wasSpeedAboveLimit = true;
       UtilityHelper.showLog("In motion");
@@ -123,6 +126,7 @@ class BackgroundLocationService {
     UtilityHelper.showLog("IS In Motion $isInMotion");
     UtilityHelper.showLog("=============================");
 
+
     if (localRecordId.isNotEmpty && isTimerStopped && !(isInMotion)) {
       UtilityHelper.showLog("Record Exist So Uploaded to Firestore");
       final recordData =
@@ -136,7 +140,7 @@ class BackgroundLocationService {
         destinationDetails: latLongModel,
         statusID: RecordStatusType.unclassified.id,
       );
-      await prepareRecordAndUploadToFirestore(recordModel);
+      await SensorPlusService.instance.prepareRecordAndUploadToFirestore(recordModel);
     } else if (localRecordId.isEmpty) {
       // if record doesn't exist
       // prepar record locally with source address.

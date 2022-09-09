@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'auth_service.dart';
 
 // Todo: Changed to 15 minutes
-const int _timeoutMinutes = 2;
+const int _timeoutMinutes = 5;
 
 class SensorPlusService {
   SensorPlusService._();
@@ -33,7 +33,7 @@ class SensorPlusService {
 
   double vehicleSpeed = 0;
   bool isSpeedWasAboveLimit = false;
-  bool get isInMotion => vehicleSpeed >= 1.0;
+  bool get isInMotion => vehicleSpeed >= 10.0;
   bool get isTimerStopped => trackingEndTime == 0;
 
   //===========================
@@ -41,6 +41,7 @@ class SensorPlusService {
   //==========================
 
   void startTimer() {
+    print("timer: ${_timer?.tick}");
     if (trackingEndTime != 0) return;
     trackingEndTime = 60 * _timeoutMinutes; // 15 minute
     const oneSec = Duration(seconds: 1);
@@ -70,7 +71,7 @@ class SensorPlusService {
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.best,
-    distanceFilter: 10,
+    distanceFilter: 1,
   );
 
   void initLocationTrackingEvent() {
@@ -87,6 +88,7 @@ class SensorPlusService {
           : ((position.speed * 18) /
               5); //Converting position speed from m/s to km/hr
       checkSpeedAndStartTracking();
+      print("vehicle speed: ${vehicleSpeed}");
     });
     // int tempTimer = 0;
     // Timer.periodic(
@@ -114,6 +116,7 @@ class SensorPlusService {
 
   void checkSpeedAndStartTracking() {
     UtilityHelper.showLog(vehicleSpeed.toString());
+    // checkRecordItLocallyAndPrepareOrUpload();
     if (isInMotion) {
       stopTimer();
       isSpeedWasAboveLimit = true;
@@ -150,8 +153,9 @@ class SensorPlusService {
       UtilityHelper.showLog("Record Exist ${localRecordId.isNotEmpty}");
       UtilityHelper.showLog("IS In Motion $isInMotion");
       UtilityHelper.showLog("=============================");
-
+      print("latLongModel:${latLongModel.lat} ${latLongModel.long}");
       if (localRecordId.isNotEmpty && isTimerStopped && !(isInMotion)) {
+
         UtilityHelper.showLog("Record Exist So Uploaded to Firestore");
         final recordData =
             await preferenceService.getMapPrefValue(key: PrefKeys.driveRecord);

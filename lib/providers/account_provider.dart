@@ -107,9 +107,10 @@ class AccountProvider extends BaseProvider {
   }
 
   Future<void> getCategoriesData() async {
+    print("getCategoriesData");
     final List<CategoryModel>? categorisList =
         await firestoreDBService.collectionFuture(
-      path: FireStoreEndPoints.subCategories,
+      path: FireStoreEndPoints.subCategories,   //SubCategories
       builder: (data, _) {
         return CategoryModel.fromMap(
           data as Map<String, dynamic>,

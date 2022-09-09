@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:ez_tracker_app/models/tracker_record/tracker_record_model.dart';
 import 'package:ez_tracker_app/providers/base_provider.dart';
 import 'package:ez_tracker_app/utils/utility_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import '../helpers/constant.dart';
 import '../models/tracker_record/location_detail_model.dart';
 import '../services/firestore_service.dart';
+import '../uis/screens/home/widgets/list_tile_rating_bar.dart';
 
 class RecordTileProvider extends BaseProvider {
   TrackerRecordModel? trackerRecordDetails;
@@ -20,7 +22,6 @@ class RecordTileProvider extends BaseProvider {
 
   LocationDetailsModel _sourceLocationDetails = LocationDetailsModel();
   LocationDetailsModel get sourceLocationDetails => _sourceLocationDetails;
-
   LocationDetailsModel _destinationLocationDetails = LocationDetailsModel();
   LocationDetailsModel get destinationLocationDetails =>
       _destinationLocationDetails;
@@ -41,6 +42,7 @@ class RecordTileProvider extends BaseProvider {
   }
 
   Future<void> prepareSourceLocationDetails() async {
+    print(trackerRecordDetails);
     final address = await getAddress(
       trackerRecordDetails?.sourceDetails?.lat,
       trackerRecordDetails?.sourceDetails?.long,
@@ -122,13 +124,14 @@ class RecordTileProvider extends BaseProvider {
     final userDetails = firebaseAuthService.currentUser();
     final record = TrackerRecordModel(
       userId: userDetails?.uid,
-      primaryCategory: primary,
-      subCategory: subCategory,
+      primaryCategory: primary ?? '',
+      subCategory: subCategory ?? '',
       statusID: (trackerRecordDetails?.ratings != null &&
               trackerRecordDetails?.ratings != 0)
           ? RecordStatusType.completed.id
           : RecordStatusType.unclassified.id,
     );
+
     await firestoreDBService.setData(
       path: '${FireStoreEndPoints.driveRecords}/${trackerRecordDetails?.recordId}',
       data: record.toMap(
@@ -137,7 +140,8 @@ class RecordTileProvider extends BaseProvider {
       withMerge: true,
     );
     trackerRecordDetails = trackerRecordDetails?.copyWith(
-        primaryCategory: primary, subCategory: subCategory);
+        primaryCategory: primary ?? '', subCategory: subCategory ?? ''
+    );
     notifyListeners();
   }
 }

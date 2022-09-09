@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ez_tracker_app/utils/utility_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FireStoreEndPoints {
   FireStoreEndPoints._();
@@ -115,5 +116,15 @@ class FireStoreService {
         .first;
     UtilityHelper.showLog('documents response: ${response.toString()}');
     return response;
+  }
+
+  Future getReportFromFirebase() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final uid = user!.uid;
+    var data =
+        await FirebaseFirestore.instance.collection('DriveRecords').get();
+    var lis = List.from(data.docs.map((e) => e));
+    return lis;
   }
 }

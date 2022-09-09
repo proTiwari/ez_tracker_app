@@ -72,54 +72,55 @@ class _MyActivityScreenState extends State<MyActivityScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              DateFormat('MMMM').format(DateTime.now()),
+              // DateFormat('MMMM').format(DateTime.now()),
+              "My activity",
               style: getMediumStyle(
                 color: ColorManager.black,
                 fontSize: FontSize.s18,
               ),
             ),
-            const Icon(
-              Icons.arrow_drop_down,
-              color: ColorManager.black,
-            )
+            // const Icon(
+            //   Icons.arrow_drop_down,
+            //   color: ColorManager.black,
+            // )
           ],
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.sim_card,
-              color: ColorManager.grey2,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(
+          //     Icons.sim_card,
+          //     color: ColorManager.grey2,
+          //   ),
+          // ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(AppHeight.h50),
-          child: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: ColorManager.accent,
-                  width: 4,
-                ),
-              ),
-            ),
-            padding: EdgeInsets.only(
-              bottom: AppPadding.p5,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                _buildHeaderColumn(title: 'DRIVES', value: '0'),
-                _buildHeaderColumn(title: 'MILES DRIVEN', value: '00000'),
-                _buildHeaderColumn(title: 'LOGGED', value: '\$0'),
-              ],
-            ),
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: Size.fromHeight(AppHeight.h50),
+        //   child: Container(
+        //     width: double.infinity,
+        //     decoration: const BoxDecoration(
+        //       border: Border(
+        //         bottom: BorderSide(
+        //           color: ColorManager.accent,
+        //           width: 4,
+        //         ),
+        //       ),
+        //     ),
+        //     // padding: EdgeInsets.only(
+        //     //   bottom: AppPadding.p5,
+        //     // ),
+        //     // child: Row(
+        //     //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     //   crossAxisAlignment: CrossAxisAlignment.end,
+        //     //   // children: [
+        //     //   //   _buildHeaderColumn(title: 'DRIVES', value: '0'),
+        //     //   //   _buildHeaderColumn(title: 'MILES DRIVEN', value: '00000'),
+        //     //   //   _buildHeaderColumn(title: 'LOGGED', value: '\$0'),
+        //     //   // ],
+        //     // ),
+        //   ),
+        // ),
       ),
       body: _buildBody(),
     );
