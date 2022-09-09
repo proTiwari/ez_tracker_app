@@ -104,7 +104,8 @@ class RecordTileProvider extends BaseProvider {
           : RecordStatusType.unclassified.id,
     );
     await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/${trackerRecordDetails?.recordId}',
+      path: FireStoreEndPoints.driveRecords +
+          '/${trackerRecordDetails?.recordId}',
       data: record.toMap(
         recordId: trackerRecordDetails?.recordId ?? '',
       ),
@@ -130,7 +131,8 @@ class RecordTileProvider extends BaseProvider {
           : RecordStatusType.unclassified.id,
     );
     await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/${trackerRecordDetails?.recordId}',
+      path: FireStoreEndPoints.driveRecords +
+          '/${trackerRecordDetails?.recordId}',
       data: record.toMap(
         recordId: trackerRecordDetails?.recordId ?? '',
       ),

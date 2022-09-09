@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'auth_service.dart';
 
 // Todo: Changed to 15 minutes
-const int _timeoutMinutes = 2;
+const int _timeoutMinutes = 5;
 
 class SensorPlusService {
   SensorPlusService._();
@@ -33,7 +33,7 @@ class SensorPlusService {
 
   double vehicleSpeed = 0;
   bool isSpeedWasAboveLimit = false;
-  bool get isInMotion => vehicleSpeed >= 1.0;
+  bool get isInMotion => vehicleSpeed >= 20.0;
   bool get isTimerStopped => trackingEndTime == 0;
 
   //===========================
@@ -74,7 +74,6 @@ class SensorPlusService {
   );
 
   void initLocationTrackingEvent() {
-    print("initLocationTrackingEvent");
     UtilityHelper.showLog('initLocationTrackingEvent: Called');
     deinitLocationTrackingEvent();
     positionStream =
@@ -102,6 +101,7 @@ class SensorPlusService {
     //     } else {
     //       vehicleSpeed = 0;
     //     }
+
     //     checkSpeedAndStartTracking();
     //   },
     // );
@@ -166,7 +166,6 @@ class SensorPlusService {
         );
         await prepareRecordAndUploadToFirestore(recordModel);
       } else if (localRecordId.isEmpty) {
-        print("Record Doesn't Exist So Created New");
         // if record doesn't exist
         // prepar record locally with source address.
         UtilityHelper.showLog("Record Doesn't Exist So Created New");
@@ -194,7 +193,7 @@ class SensorPlusService {
       userId: firebaseAuthService.currentUser()?.uid,
     );
     await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/${recordModel.recordId}',
+      path: FireStoreEndPoints.driveRecords + '/${recordModel.recordId}',
       data: recordModel.toMap(
         recordId: recordModel.recordId ?? '',
       ),

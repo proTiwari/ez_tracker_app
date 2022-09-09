@@ -4,7 +4,6 @@ import 'package:ez_tracker_app/services/firestore_service.dart';
 import 'package:ez_tracker_app/utils/utility_helper.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 class HomeProvider extends BaseProvider {
   LatLongModel? _latLongModel;
@@ -25,7 +24,6 @@ class HomeProvider extends BaseProvider {
   }
 
   Stream<List<TrackerRecordModel>> getUnClassifiedRecords() {
-    print('getUnClassifiedRecords');
     final now = DateTime.now();
     final startDate = (DateFormat('yyyy-MM-dd').format(DateTime(
       now.year,
@@ -37,8 +35,8 @@ class HomeProvider extends BaseProvider {
       0,
     )));
 
-    UtilityHelper.showLog("StartDate: $startDate");
-    UtilityHelper.showLog("EndDate: $endDate");
+    // UtilityHelper.showLog("StartDate: $startDate");
+    // UtilityHelper.showLog("EndDate: $endDate");
     return firestoreDBService.collectionStream<TrackerRecordModel>(
       path: FireStoreEndPoints.driveRecords,
       queryBuilder: (record) {
@@ -117,31 +115,31 @@ class HomeProvider extends BaseProvider {
     );
   }
 
-  Future<void> prepareRecordAndUploadToFirestore() async {
-    final recordId = const Uuid().v4();
-    final userDetails = firebaseAuthService.currentUser();
-    final record = TrackerRecordModel(
-      recordCreatedDate: DateTime.now(),
-      userId: userDetails?.uid,
-      statusID: 2,
-      sourceDetails: LatLongModel(
-        createdDate: DateTime.now(),
-        lat: _latLongModel?.lat,
-        long: _latLongModel?.long,
-      ),
-      destinationDetails: LatLongModel(
-        createdDate: DateTime.now(),
-        lat: 72.969818,
-        long: 23.597969,
-      ),
-    );
+  // Future<void> prepareRecordAndUploadToFirestore() async {
+  //   final recordId = const Uuid().v4();
+  //   final userDetails = firebaseAuthService.currentUser();
+  //   final record = TrackerRecordModel(
+  //     recordCreatedDate: DateTime.now(),
+  //     userId: userDetails?.uid,
+  //     statusID: 2,
+  //     sourceDetails: LatLongModel(
+  //       createdDate: DateTime.now(),
+  //       lat: _latLongModel?.lat,
+  //       long: _latLongModel?.long,
+  //     ),
+  //     destinationDetails: LatLongModel(
+  //       createdDate: DateTime.now(),
+  //       lat: 72.969818,
+  //       long: 23.597969,
+  //     ),
+  //   );
 
-    await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/$recordId',
-      data: record.toMap(
-        recordId: recordId,
-      ),
-      withMerge: true,
-    ).whenComplete(() => print("data uploaded"));
-  }
+  //   await firestoreDBService.setData(
+  //     path: FireStoreEndPoints.driveRecords + '/$recordId',
+  //     data: record.toMap(
+  //       recordId: recordId,
+  //     ),
+  //     withMerge: true,
+  //   );
+  // }
 }

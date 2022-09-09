@@ -22,6 +22,7 @@ bool onIosBackground(ServiceInstance service) {
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) async {
+  print('onStart');
   // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
 
@@ -61,6 +62,7 @@ class BackgroundService {
   }
 
   Future<void> initUserTracking(bool isLocationEnabled) async {
+    print("initUserTracking");
     UtilityHelper.showLog('initUserTracking: Called**');
     if (isLocationEnabled) {
       final service = FlutterBackgroundService();

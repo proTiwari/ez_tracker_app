@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'package:background_location/background_location.dart';
 import 'package:ez_tracker_app/models/tracker_record/tracker_record_model.dart';
 import 'package:ez_tracker_app/services/firestore_service.dart';
@@ -10,10 +9,9 @@ import 'package:uuid/uuid.dart';
 import 'auth_service.dart';
 
 // Todo: Changed to 15 minutes
-const int _timeoutMinutes = 2;
+const int _timeoutMinutes = 5;
 
 class BackgroundLocationService {
-
   BackgroundLocationService._();
   static final instance = BackgroundLocationService._();
 
@@ -26,7 +24,7 @@ class BackgroundLocationService {
 
   double vehicleSpeed = 0;
   bool wasSpeedAboveLimit = false;
-  bool get isInMotion => vehicleSpeed >= 5.0;
+  bool get isInMotion => vehicleSpeed >= 20.0;
   bool get isTimerStopped => trackingEndTime == 0;
 
   //===========================
@@ -34,8 +32,6 @@ class BackgroundLocationService {
   //==========================
 
   void startTimer() {
-    print('startTimer');
-    developer.log('startTimer', name: 'background_location_service');
     if (trackingEndTime != 0) return;
     trackingEndTime = 60 * _timeoutMinutes; // 15 minute
     const oneSec = Duration(seconds: 1);
@@ -164,7 +160,7 @@ class BackgroundLocationService {
       userId: firebaseAuthService.currentUser()?.uid,
     );
     await firestoreDBService.setData(
-      path: '${FireStoreEndPoints.driveRecords}/${recordModel.recordId}',
+      path: FireStoreEndPoints.driveRecords + '/${recordModel.recordId}',
       data: recordModel.toMap(
         recordId: recordModel.recordId ?? '',
       ),
